@@ -9,7 +9,7 @@ from matplotlib import animation
 
 nx=np.arange(1,10,1)
 R=np.full(nx.size, 1)
-res=nx//R
+res=nx
 dx=R/nx
 error=[]
 error_a=[]
@@ -53,9 +53,8 @@ plot.show()
 # 0 <= x <= 3 u'(3)=u*'(3) and u'(0)=u*'(0) is given
 
 nx=np.arange(10000,100000,5000)
-print(nx.size)
 R=np.full(nx.size, 3)
-res=nx//R
+res=nx
 dx=R/nx
 error=[]
 error_a=[]
