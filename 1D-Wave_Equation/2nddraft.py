@@ -27,8 +27,8 @@ for n in range(1, nt+1):
 	U_prev=U_old
 	U_old=U_curr
 	plt.clf()  # Clear the figure
-	plt.plot(x, U_init, color='xkcd:blue', label='Initial Temperature')
-	plt.plot(x, U_old, color='xkcd:salmon', label='Current Temperature')  # Contour plotting the values
+	plt.plot(x, U_init, color='xkcd:blue', label='Initial wave')
+	plt.plot(x, U_old, color='xkcd:salmon', label='Current wave')  # Contour plotting the values
 	plt.xlabel('Length', fontsize=1)  # X axis label
 	plt.title('1D wave')
 	plt.legend()
