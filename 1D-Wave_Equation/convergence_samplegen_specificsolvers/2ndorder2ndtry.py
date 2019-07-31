@@ -1,12 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-from scipy import signal
-from scipy.fftpack import fft, fftshift
 
 L=1
-T=3
-nt=150 #number of time intervals
+T=1
+nt=50 #number of time intervals
 nx=100 #number of space intervals
 
 dt=T/nt
@@ -58,20 +56,21 @@ u[i] = u[0]
 u_2= u_1
 u_1= u
 for n in range(2,nt-1):
-	i = 0
-	u[i] = u_1[i] + c_*(u_1[i+1] - u_1[i])
 	i = nx
-	u[i] = u[0]
+	u[i] = u_1[i] - c_*(u_1[i] - u_1[i-1])
+	i = 0
+	u[i] = u[nx]
 	
 	for i in range(1,nx):
-		u[i] = - u_2[i] + 2*u_1[i] + c_2*(u_1[i-1] - 2*u_1[i] + u_1[i+1])
+		u[nx-i] = - u_2[nx-i] + 2*u_1[nx-i] + c_2*(u_1[nx-i+1] - 2*u_1[nx-i] + u_1[nx-i-1])
+		
 	plt.clf()  # Clear the figure
-	plt.plot(x, u_init, color='xkcd:blue', label='Initial wave')
-	plt.plot(x, -1*u, color='xkcd:salmon', label='Current wave')  # Contour plotting the values
+	plt.plot(x, du_1, color='xkcd:blue', label='Initial wave')
+	plt.plot(x, dv, color='xkcd:salmon', label='Current wave')  # Contour plotting the values
 	plt.xlabel('x-axis', fontsize=1)  # X axis label
 	plt.title('1D wave')
 	plt.legend()
 	plt.grid(True)  # Enabling gridding
-	plt.pause(0.1)
+	plt.pause(0.05)
 	u_2 =u_1
 	u_1= u

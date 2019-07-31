@@ -7,13 +7,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-c=0.5
+c=100
 l = 1                         
-nx =100	                       
-T = 5                    
-nt = 250                  
-v_0=5000
-std_=0.1                  
+nx =2**8                      
+T = 0.01                    
+nt = 2**8                  
+v_0=5                
 x = np.linspace(0, l, nx+1)
 #print(x.size)
 t = np.linspace(0, T, nt+1)
@@ -24,8 +23,6 @@ v_init = np.full(x.size,v_0)
 
 v_curr= np.zeros(x.size)
 v_old= np.copy(v_init)
-v_init[0]=0
-v_init[x.size-1]=0
 h =l/nx
 #print(h)
 k=T/nt                 
@@ -38,30 +35,38 @@ c_=c*k/h
 #k1=1/(std_*math.sqrt(2*np.pi))
 #U_init=k1*np.power(temp1,temp2)
 ################
-U_init= np.sin(2*np.pi*x)
-
-U_old= np.copy(U_init)
-U_curr=np.zeros(x.size)
-for n in range(1, nt):
+U_init= np.sin(np.pi*x)
+UU=[]
+U_old=np.copy(U_init)
+U_curr=np.zeros(nx+1)
+plt.plot(x, U_init, color='xkcd:blue', label='Initial wave')
+plt.plot(x, U_old, color='xkcd:green', label='Current wave')  # Contour plotting the values
+UU.append(U_old[nx//2])
+for n in range(1, nt+1):
 	#U_curr[0]=np.sin(2*np.pi*n*k)
 	#U_curr[x.size-1]=np.sin(2*np.pi*n*k)
 	for i in range(1,nx):
 		#print((v_old[i+1]-v_old[i-1])*c*k/(2*h))
-		U_curr[i]=U_old[i]+(v_old[i+1]-v_old[i-1])*c*k/(2*h)
+		U_curr[nx-i]=U_old[nx-i]+(v_old[nx-i-1]-v_old[nx-i+1])*(-c)*k/(2*h)
+		du=np.zeros(nx+1)
 	U_curr[0]=U_old[0] + c_*(U_old[0+1] - U_old[0])
 	U_curr[nx]=U_old[nx] - c_*(U_old[nx] - U_old[nx-1])
-	#U_curr[nx]=U_curr[0]
-	U_old=U_curr
-	for i in range(1,x.size-1):
-		v_curr[i]=v_old[i]+((U_old[i+1]-U_old[i-1])*(c)*k)/(2*h)
+	U_curr[nx]=0
+	U_curr[0]=0
+	
+	for i in range(1,nx):
+		v_curr[nx-i]=v_old[nx-i]+((U_old[nx-i-1]-U_old[nx-i+1])*(-c)*k)/(2*h)
 	v_curr[0]=v_old[0] + c_*(v_old[0+1] - v_old[0])
 	v_curr[nx]=v_old[nx] - c_*(v_old[nx] - v_old[nx-1])
 	v_old=v_curr
+	U_old=U_curr
+	UU.append(U_old[nx//2])
 	plt.clf()  # Clear the figure
+	plt.plot(x, U_old, color='xkcd:green', label='Current wave')  # Contour plotting the values
 	plt.plot(x, U_init, color='xkcd:blue', label='Initial wave')
-	plt.plot(x, U_old, color='xkcd:red', label='Current wave')  # Contour plotting the values
+	#plt.plot(x, v_old, color='xkcd:green', label='Current v fundtion') 
 	plt.xlabel('x-axis', fontsize=1)  # X axis label
 	plt.title('1D wave')
 	plt.legend()
 	plt.grid(True)  # Enabling gridding
-	plt.pause(0.05)
+	plt.pause(0.01)
