@@ -31,16 +31,7 @@ ku1=(-1)/((std_**3)*math.sqrt(2*np.pi))
 u_1 =k1*np.power(temp1,temp2) #u(x,0)= (x)=e**((-1/2)*(x-(L/2)/sigma)**2), set u_1 to initial condition
 du_1=ku1*((L/2)-x)*np.power(temp1,temp2)
 u_init= np.copy(u_1)
-#plt.plot(x,du_1)
-#plt.title(r"Gaussian window ($\sigma$=) " + str(std_))
-#plt.ylabel("Amplitude")
-#plt.xlabel("Sample")
-#plt.show()
-#plt.plot(x,u_1)
-#plt.title(r"Gaussian window ($\sigma$=) " + str(std_))
-#plt.ylabel("Amplitude")
-#plt.xlabel("Sample")
-#plt.show()
+
 
 # Special formula for the first step
 for i in range(1, nx):
