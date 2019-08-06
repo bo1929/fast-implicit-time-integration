@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+
 def solver(boundary):
 	###################
 	#instance parameters
-	c=0.1# characteristic wave speed
+	c=100# characteristic wave speed
 	l = 1                         
 	nx =2**9 #number of separeted space intervals x-axis                  
 	T = 10 #time domain                  
@@ -26,7 +27,7 @@ def solver(boundary):
 	##################
 	#instance: gaussian initial condition for u(0,x)
 	temp1=np.full(nx+1,np.e)
-	temp2=(-0.5)*np.power(((x)/std_),2)
+	temp2=(-0.5)*np.power((x/std_),2)
 	k1=1/(std_*math.sqrt(2*np.pi))
 	U_init=k1*np.power(temp1,temp2)
 	#################
@@ -64,7 +65,7 @@ def solver(boundary):
 			v_curr[nx]=v_curr[nx-1]
 		if(boundary=="periodic"):
 			v_curr[nx]=v_old[nx] - c_*(v_old[nx] - v_old[nx-1])
-			v_curr[0]=v_curr[nx]
+			v_curr[0]=v_old[0] + c_*(v_old[1] - v_old[0])
 		#################
 		v_old=v_curr
 		U_old=U_curr
@@ -81,15 +82,15 @@ def solver(boundary):
 
 
 boundary_condition='drichlect'
-solver(boundary_condition)
+#solver(boundary_condition)
 
 boundary_condition='neumann'
-solver(boundary_condition)
+#solver(boundary_condition)
 
 boundary_condition='open'
-solver(boundary_condition)
+#solver(boundary_condition)
 
 #periodic works well but mean of gaussian pek should be at boundary
-
+#NOT WORKING
 #boundary_condition='periodic'
 #solver(boundary_condition)
