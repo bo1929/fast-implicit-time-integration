@@ -4,10 +4,10 @@ import math
 def solver(boundary,deg):
 	###################
 	#instance parameters
-	c=0.1# characteristic wave speed
+	c=100# characteristic wave speed
 	l = 1                         
 	nx =2**deg #number of separeted space intervals x-axis                  
-	T = 10 #time domain                  
+	T = 0.01 #time domain                  
 	nt = 2**deg#number of seperated time intervals               
 	v_0=0 #inital t=0 v, not necessarily constant(?), It does not affect
 	std_=0.1
@@ -41,12 +41,18 @@ def solver(boundary,deg):
 		if(boundary=="neumann"):
 			U_curr[0]=U_curr[1]
 			U_curr[nx]=U_curr[nx-1]
+		if(boundary=="open"):
+			U_curr[0]=U_old[0] + c_*(U_old[0+1] - U_old[0])
+			U_curr[nx]=U_old[nx] - c_*(U_old[nx] - U_old[nx-1])
 		for i in range(1,nx):#space iteration for v except boundary conditions, at t_n
 			v_curr[nx-i]=v_old[nx-i]+((U_old[nx-i-1]-U_old[nx-i+1])*(c)*k)/(2*h)
 		###boundary condition (?): open
 		if(boundary=="neumann"):
 			v_curr[0]=v_old[0]
 			v_curr[nx]=v_old[nx]
+		if(boundary=="open"):
+			v_curr[0]=v_old[0] + c_*(v_old[0+1] - v_old[0])
+			v_curr[nx]=v_old[nx] - c_*(v_old[nx] - v_old[nx-1])
 		#################
 		v_old=v_curr
 		U_old=U_curr
@@ -57,6 +63,6 @@ def solver(boundary,deg):
 		f.close
 
 for i in range(2,15):
-	solver("neumann",i)
+	solver("open",i)
 print('#################')
 

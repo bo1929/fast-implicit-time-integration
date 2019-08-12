@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 import math
 
 L=1
-T=1
-nt=50 #number of time intervals
-nx=100 #number of space intervals
+T=0.01
+nt=2**8 #number of time intervals
+nx=2**8 #number of space intervals
 
 dt=T/nt
 dx=L/nx
 
-c=0.5
+c=100
 c_=c*dt/dx #c_ should be smaller than 1
 c_2=c_**2
 
@@ -56,8 +56,8 @@ for n in range(2,nt-1):
 		u[nx-i] = - u_2[nx-i] + 2*u_1[nx-i] + c_2*(u_1[nx-i+1] - 2*u_1[nx-i] + u_1[nx-i-1])
 		
 	plt.clf()  # Clear the figure
-	plt.plot(x, du_1, color='xkcd:blue', label='Initial wave')
-	plt.plot(x, dv, color='xkcd:salmon', label='Current wave')  # Contour plotting the values
+	plt.plot(x, u_init, color='xkcd:blue', label='Initial wave')
+	plt.plot(x, u, color='xkcd:salmon', label='Current wave')  # Contour plotting the values
 	plt.xlabel('x-axis', fontsize=1)  # X axis label
 	plt.title('1D wave')
 	plt.legend()

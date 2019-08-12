@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from scipy.sparse.linalg import gmres
+from scipy.sparse import csr_matrix
 def solver(boundary):
     ###################
     #instance parameters

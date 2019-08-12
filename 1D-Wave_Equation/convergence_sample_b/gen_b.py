@@ -57,12 +57,38 @@ def solver(boundary,deg):
     coef_matrix[2*nx-3][2*nx-3]=1
     uv_ol = np.append(U_old[1:-1],v_old[1:-1])
     uandv_rhs =np.append(U_curr[1:-1],v_curr[1:-1])
+    v0_o=v_init[0]
+    vnx_o=v_init[nx]
 
+    u0_o=U_init[0]
+    unx_o=U_init[nx]
+    v0_c=0
+    vnx_c=0
+    u0_c=0
+    unx_c=0
     if(boundary=="neumann"):
     ####NEUMANN BOUNDARY CONDITION
     	coef_matrix[nx-1][0]=coef_matrix[nx-1][0]+lamb
     	coef_matrix[2*nx-3][nx-2]=coef_matrix[2*nx-3][nx-2]-lamb
     for n in range(1, nt+2):#time iteration except t=0
+        if(boundary=="open"):
+            v0_c=lamb*(uv_ol[nx-1]-v0_o)+v0_o
+            vnx_c=lamb*(uv_ol[2*nx-3]-vnx_o)+vnx_o
+            u0_c=lamb*(uv_ol[0]-u0_o)+u0_o
+            unx_c=lamb*(uv_ol[nx-2]-unx_o)+unx_o
+
+            uv_ol[0]=uv_ol[0]-lamb*v0_c
+            uv_ol[nx-2]=uv_ol[nx-2]+lamb*vnx_c
+            uv_ol[nx-1]=uv_ol[nx-1]-lamb*u0_c
+            uv_ol[2*nx-3]=uv_ol[2*nx-3]+lamb*unx_c
+            v_curr[0]=v0_c
+            v_curr[nx]=vnx_c
+            U_curr[0]=u0_c
+            U_curr[nx]=unx_c
+        v0_o=v0_c
+        vnx_o=vnx_c
+        u0_o=u0_c
+        unx_o=unx_c    
         if(boundary=="neumann"):
         ####NEUMANN BOUNDARY CONDITION
         	uv_ol[0]=uv_ol[0]-lamb*v_old[0]
@@ -75,7 +101,9 @@ def solver(boundary,deg):
         #A=csr_matrix(coef_matrix)
         #uandv_rhs=gmres(A,uv_ol)
         #uandv_rhs=uandv_rhs[0]
-        uandv_rhs=np.linalg.solve(coef_matrix,uv_ol)
+        A=csr_matrix(coef_matrix)
+        uandv_rhs=gmres(A,uv_ol)
+        uandv_rhs=uandv_rhs[0]
         U_curr[1:-1]=uandv_rhs[0:nx-1]
         
         v_curr[1:-1]=uandv_rhs[nx-1:2*nx-2]
@@ -84,13 +112,11 @@ def solver(boundary,deg):
         uv_ol=uandv_rhs
         U_old=U_curr
         #################
-        name="reference_b_l"+str(deg)+".npy"
+        name="reference_b"+str(deg)+".npy"
         f = open(name, 'ab')
         np.save(f,U_old)
         f.close
-
-
-for i in range (2,15):
-    solver("neumann",i)
+for i in range(2,13):
+    solver("open",i)
 
 
