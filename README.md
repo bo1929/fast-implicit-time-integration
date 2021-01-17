@@ -1,2 +1,1 @@
-# 2019Summer-TUM
-Fast implicit time integration / Internship
+Fast implicit time integration / Internship, 2019Summer-TUM
