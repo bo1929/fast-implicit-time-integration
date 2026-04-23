@@ -1,8 +1,6 @@
 # Fast Implicit Time Integration for 1D PDEs
 
-Small numerical solvers for the 1D heat and wave equations, with an emphasis on implicit time integration and a communication-avoiding Crank-Nicolson variant for the wave equation.
-
-The current codebase is a cleaned-up refactor of the original 2019 project. It is intended to be easy to run locally, inspect, and extend.
+Small numerical solvers for the 1D heat and wave equations, using implicit time integration and a communication-avoiding Crank-Nicolson variant for the wave equation.
 
 ## What Is Here
 
@@ -14,14 +12,6 @@ The current codebase is a cleaned-up refactor of the original 2019 project. It i
   A convergence-data generator and plotter for the wave equation.
 - `tests/`
   Small regression tests covering the main implicit solver paths.
-
-## Installation
-
-```bash
-git clone <repository-url>
-cd fast-implicit_time-integration
-pip install -r requirements.txt
-```
 
 ## Quick Start
 
@@ -125,7 +115,7 @@ solver = Wave1DSolver(c=0.5, L=1.0, T=1.0, nx=256, nt=256)
 u, v = solver.solve(method="comm_cn", ncx=16, hx=4)
 ```
 
-Larger halos generally improve agreement with the full Crank-Nicolson solve, but increase local work.
+Larger halos generally improve agreement with the full Crank-Nicolson solve, but end up increasing local work as expected.
 
 ## Heat Equation Model
 
@@ -150,7 +140,6 @@ In 1D this produces a tridiagonal linear system, solved here with a Thomas-algor
 
 - The wave examples assume periodic boundaries.
 - The analytic/reference solution is only available for the periodic wave setup.
-- The communication-avoiding implementation is best viewed as a research/demo prototype rather than a production parallel solver.
 
 ## Author
 
